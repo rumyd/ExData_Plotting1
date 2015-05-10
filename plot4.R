@@ -1,13 +1,23 @@
+# function to plot multiple base plots
+
 plot4 <- function () {
-    
+
+# read url provided to get the data for plotting
     df <- read.csv(getZip("http://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"), 
                    sep = ";", header = TRUE)
+# Subset to filter on days needed for plotting
     df <- subset(df, Date %in% c("1/2/2007", "2/2/2007"))
-    df$Date <- paste(df$Date, " ", df$Time)
+
+# concatenate date and time to haave meaningful time data for plotting
+df$Date <- paste(df$Date, " ", df$Time)
+
+# Open file device PNG for saving to local file
     png(file = "plot4.png")
     
-    par(mfrow = c(2, 2))
-    
+#Use par function to determine 2 rows and 2 columns to house the plots 
+par(mfrow = c(2, 2))
+
+# Build four plots starting from row 1 col1, row 1, col2 and so on..
     plot(strptime(df$Date, "%d/%m/%Y %T"), (as.numeric(df$Global_active_power)/1000), 
          type = "l", xlab = " ", ylab = "Global Active Power (kilowatts)",
          ylim = c(0, 4))
@@ -27,5 +37,7 @@ plot4 <- function () {
     plot(strptime(df$Date, "%d/%m/%Y %T"), (as.numeric(df$Global_reactive_power)/1000), 
          type = "l", xlab = "datetime", ylab = "Global_reactive_power", 
          ylim = c(0.0, 0.5))
+
+# close file device PNG
     dev.off()
 }
